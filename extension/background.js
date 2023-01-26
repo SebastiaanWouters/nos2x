@@ -1,6 +1,7 @@
 import browser from 'webextension-polyfill'
 import {validateEvent, signEvent, getEventHash, getPublicKey} from 'nostr-tools'
 import {encrypt, decrypt} from 'nostr-tools/nip04'
+import * as secp256k1 from '@noble/secp256k1'
 
 import {
   PERMISSIONS_REQUIRED,
@@ -66,6 +67,14 @@ async function handleContentScriptMessage({type, params, host}) {
         if (!validateEvent(event)) return {error: 'invalid event'}
 
         return await signEvent(event, sk)
+      }
+      case 'getSharedSecret': {
+        let {pubkey} = params
+        let key = secp256k1.getSharedSecret(sk, '02' + pubkey)
+        let normalizedKey = getNormalizedX(key)
+        let hash = await secp256k1.utils.sha256(normalizedKey)
+        return secp256k1.utils.bytesToHex(hash)
+        
       }
       case 'nip04.encrypt': {
         let {peer, plaintext} = params
