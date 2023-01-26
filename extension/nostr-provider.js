@@ -12,6 +12,10 @@ window.nostr = {
     return this._call('signEvent', {event})
   },
 
+  async getSharedSecret(pubkey) {
+    return this._call('getSharedSecret', {pubkey})
+  },
+
   async getRelays() {
     return this._call('getRelays', {})
   },
