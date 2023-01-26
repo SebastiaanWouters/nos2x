@@ -8,6 +8,10 @@ window.nostr = {
     return this._pubkey
   },
 
+  async getSharedSecret(pubkey) {
+    return this._call('getSharedSecret', {pubkey})
+  },
+
   async signEvent(event) {
     return this._call('signEvent', {event})
   },
