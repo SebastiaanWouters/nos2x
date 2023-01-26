@@ -132,3 +132,7 @@ function promptPermission(host, level, params) {
     prompts[id] = {resolve, reject}
   })
 }
+
+function getNormalizedX(key) {
+  return key.slice(1, 33)
+}
